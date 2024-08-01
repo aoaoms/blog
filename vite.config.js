@@ -40,6 +40,7 @@ export default defineConfig({
   // ssgOptions: {
   //   format: 'cjs',
   // },
+  base: './',
   server: {
     https: true,
     proxy: {
