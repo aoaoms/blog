@@ -1,0 +1,211 @@
+[
+    {
+        "name": "简体中文",
+        "alias": "晓晓",
+        "gender": "Female",
+        "locale": "zh-CN",
+        "language": "Chinese (Mandarin, Simplified)",
+        "voice": "zh-CN-XiaoxiaoNeural"
+    },{
+        "name": "简体中文",
+        "alias": "晓伊",
+        "gender": "Female",
+        "locale": "zh-CN",
+        "language": "Chinese (Mandarin, Simplified)",
+        "voice": "zh-CN-XiaoyiNeural"
+    },{
+        "name": "简体中文",
+        "alias": "云坚",
+        "gender": "Male",
+        "locale": "zh-CN",
+        "language": "Chinese (Mandarin, Simplified)",
+        "voice": "zh-CN-YunjianNeural"
+    },{
+        "name": "简体中文",
+        "alias": "云夏",
+        "gender": "Male",
+        "locale": "zh-CN",
+        "language": "Chinese (Mandarin, Simplified)",
+        "voice": "zh-CN-YunxiaNeural"
+    },{
+        "name": "简体中文",
+        "alias": "云阳",
+        "gender": "Male",
+        "locale": "zh-CN",
+        "language": "Chinese (Mandarin, Simplified)",
+        "voice": "zh-CN-YunyangNeural"
+    },{
+        "name": "English AvaMultilingual",
+        "alias": "Ava-多语言",
+        "gender": "Female",
+        "locale": "en-US",
+        "language": "English (United States)",
+        "voice": "en-US-AvaMultilingualNeural"
+    },{
+        "name": "English AndrewMultilingual",
+        "alias": "Andrew-多语言",
+        "gender": "Male",
+        "locale": "en-US",
+        "language": "English (United States)",
+        "voice": "en-US-AndrewMultilingualNeural"
+    },{
+        "name": "English Ava",
+        "alias": "Ava",
+        "gender": "Female",
+        "locale": "en-US",
+        "language": "English (United States)",
+        "voice": "en-US-AvaNeural"
+    },
+    {
+        "name": "English Emma",
+        "alias": "Emma-多语言",
+        "gender": "Female",
+        "locale": "en-US",
+        "language": "English (United States)",
+        "voice": "en-US-EmmaMultilingualNeural"
+    },
+    {
+        "name": "English Brian",
+        "alias": "Brian-多语言",
+        "gender": "Male",
+        "locale": "en-US",
+        "language": "English (United States)",
+        "voice": "en-US-BrianMultilingualNeural"
+    },
+    {
+        "name": "English Andrew",
+        "alias": "Andrew",
+        "gender": "Male",
+        "locale": "en-US",
+        "language": "English (United States)",
+        "voice": "en-US-AndrewNeural"
+    },
+    {
+        "name": "English Emma",
+        "alias": "Emma",
+        "gender": "Female",
+        "locale": "en-US",
+        "language": "English (United States)",
+        "voice": "en-US-EmmaNeural"
+    },
+    {
+        "name": "English Brian",
+        "alias": "Brian",
+        "gender": "Male",
+        "locale": "en-US",
+        "language": "English (United States)",
+        "voice": "en-US-BrianNeural"
+    },
+    {
+        "name": "English Ana",
+        "alias": "Ana",
+        "gender": "Female,Child",
+        "locale": "en-US",
+        "language": "English (United States)",
+        "voice": "en-US-AnaNeural"
+    },
+    {
+        "name": "English Aria",
+        "alias": "Aria",
+        "gender": "Female",
+        "locale": "en-US",
+        "language": "English (United States)",
+        "voice": "en-US-AriaNeural"
+    },
+    {
+        "name": "English Christopher",
+        "alias": "Christopher",
+        "gender": "Male",
+        "locale": "en-US",
+        "language": "English (United States)",
+        "voice": "en-US-ChristopherNeural"
+    },
+    {
+        "name": "English Eric",
+        "alias": "Eric",
+        "gender": "Male",
+        "locale": "en-US",
+        "language": "English (United States)",
+        "voice": "en-US-EricNeural"
+    },
+    {
+        "name": "English Guy",
+        "alias": "Guy",
+        "gender": "Male",
+        "locale": "en-US",
+        "language": "English (United States)",
+        "voice": "en-US-GuyNeural"
+    },
+    {
+        "name": "English Jenny",
+        "alias": "Jenny",
+        "gender": "Female",
+        "locale": "en-US",
+        "language": "English (United States)",
+        "voice": "en-US-JennyNeural"
+    },
+    {
+        "name": "English Michelle",
+        "alias": "Michelle",
+        "gender": "Female",
+        "locale": "en-US",
+        "language": "English (United States)",
+        "voice": "en-US-MichelleNeural"
+    },
+    {
+        "name": "English Roger",
+        "alias": "Roger",
+        "gender": "Male",
+        "locale": "en-US",
+        "language": "English (United States)",
+        "voice": "en-US-RogerNeural"
+    },
+    {
+        "name": "English Steffan",
+        "alias": "Steffan",
+        "gender": "Male",
+        "locale": "en-US",
+        "language": "English (United States)",
+        "voice": "en-US-SteffanNeural"
+    },
+    {
+        "name": "English Libby",
+        "alias": "Libby",
+        "gender": "Female",
+        "locale": "en-GB",
+        "language": "English (United Kingdom)",
+        "voice": "en-GB-LibbyNeural"
+    },
+    {
+        "name": "English Maisie",
+        "alias": "Maisie",
+        "gender": "Female,Child",
+        "locale": "en-GB",
+        "language": "English (United Kingdom)",
+        "voice": "en-GB-MaisieNeural"
+    },
+    {
+        "name": "English Ryan",
+        "alias": "Ryan",
+        "gender": "Male",
+        "locale": "en-GB",
+        "language": "English (United Kingdom)",
+        "voice": "en-GB-RyanNeural"
+    },
+    {
+        "name": "English Sonia",
+        "alias": "Sonia",
+        "gender": "Female",
+        "locale": "en-GB",
+        "language": "English (United Kingdom)",
+        "voice": "en-GB-SoniaNeural"
+    },
+    {
+        "name": "English Thomas",
+        "alias": "Thomas",
+        "gender": "Male",
+        "locale": "en-GB",
+        "language": "English (United Kingdom)",
+        "voice": "en-GB-ThomasNeural"
+    }
+]

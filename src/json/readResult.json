@@ -1,0 +1,1623 @@
+{
+    "status": "succeeded",
+    "createdDateTime": "2024-04-14T15:11:41Z",
+    "lastUpdatedDateTime": "2024-04-14T15:11:42Z",
+    "analyzeResult": {
+        "version": "3.2.0",
+        "modelVersion": "2022-04-30",
+        "readResults": [
+            {
+                "page": 1,
+                "angle": 0,
+                "width": 960,
+                "height": 1280,
+                "unit": "pixel",
+                "lines": [
+                    {
+                        "boundingBox": [
+                            165,
+                            361,
+                            347,
+                            357,
+                            348,
+                            383,
+                            165,
+                            388
+                        ],
+                        "text": "People eat turkey",
+                        "appearance": {
+                            "style": {
+                                "name": "other",
+                                "confidence": 0.972
+                            }
+                        },
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    167,
+                                    361,
+                                    236,
+                                    359,
+                                    236,
+                                    387,
+                                    165,
+                                    388
+                                ],
+                                "text": "People",
+                                "confidence": 0.996
+                            },
+                            {
+                                "boundingBox": [
+                                    242,
+                                    359,
+                                    276,
+                                    358,
+                                    276,
+                                    386,
+                                    241,
+                                    387
+                                ],
+                                "text": "eat",
+                                "confidence": 0.998
+                            },
+                            {
+                                "boundingBox": [
+                                    281,
+                                    358,
+                                    346,
+                                    357,
+                                    347,
+                                    383,
+                                    281,
+                                    386
+                                ],
+                                "text": "turkey",
+                                "confidence": 0.997
+                            }
+                        ]
+                    },
+                    {
+                        "boundingBox": [
+                            575,
+                            359,
+                            815,
+                            365,
+                            814,
+                            391,
+                            574,
+                            385
+                        ],
+                        "text": "People eat special food",
+                        "appearance": {
+                            "style": {
+                                "name": "other",
+                                "confidence": 0.972
+                            }
+                        },
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    575,
+                                    359,
+                                    646,
+                                    362,
+                                    645,
+                                    387,
+                                    574,
+                                    386
+                                ],
+                                "text": "People",
+                                "confidence": 0.995
+                            },
+                            {
+                                "boundingBox": [
+                                    651,
+                                    363,
+                                    684,
+                                    364,
+                                    683,
+                                    388,
+                                    650,
+                                    387
+                                ],
+                                "text": "eat",
+                                "confidence": 0.998
+                            },
+                            {
+                                "boundingBox": [
+                                    689,
+                                    364,
+                                    764,
+                                    365,
+                                    763,
+                                    390,
+                                    688,
+                                    388
+                                ],
+                                "text": "special",
+                                "confidence": 0.996
+                            },
+                            {
+                                "boundingBox": [
+                                    769,
+                                    365,
+                                    815,
+                                    365,
+                                    814,
+                                    392,
+                                    768,
+                                    391
+                                ],
+                                "text": "food",
+                                "confidence": 0.989
+                            }
+                        ]
+                    },
+                    {
+                        "boundingBox": [
+                            165,
+                            392,
+                            346,
+                            390,
+                            346,
+                            418,
+                            165,
+                            420
+                        ],
+                        "text": "on Thanksgiving.",
+                        "appearance": {
+                            "style": {
+                                "name": "other",
+                                "confidence": 0.972
+                            }
+                        },
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    165,
+                                    394,
+                                    192,
+                                    393,
+                                    193,
+                                    419,
+                                    166,
+                                    420
+                                ],
+                                "text": "on",
+                                "confidence": 0.998
+                            },
+                            {
+                                "boundingBox": [
+                                    198,
+                                    393,
+                                    345,
+                                    391,
+                                    345,
+                                    419,
+                                    199,
+                                    419
+                                ],
+                                "text": "Thanksgiving.",
+                                "confidence": 0.991
+                            }
+                        ]
+                    },
+                    {
+                        "boundingBox": [
+                            593,
+                            394,
+                            795,
+                            397,
+                            794,
+                            424,
+                            593,
+                            419
+                        ],
+                        "text": "on New Year's Day.",
+                        "appearance": {
+                            "style": {
+                                "name": "other",
+                                "confidence": 0.972
+                            }
+                        },
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    593,
+                                    395,
+                                    618,
+                                    395,
+                                    618,
+                                    418,
+                                    593,
+                                    419
+                                ],
+                                "text": "on",
+                                "confidence": 0.998
+                            },
+                            {
+                                "boundingBox": [
+                                    623,
+                                    394,
+                                    668,
+                                    395,
+                                    668,
+                                    419,
+                                    623,
+                                    418
+                                ],
+                                "text": "New",
+                                "confidence": 0.998
+                            },
+                            {
+                                "boundingBox": [
+                                    678,
+                                    395,
+                                    744,
+                                    396,
+                                    743,
+                                    421,
+                                    678,
+                                    419
+                                ],
+                                "text": "Year's",
+                                "confidence": 0.994
+                            },
+                            {
+                                "boundingBox": [
+                                    749,
+                                    396,
+                                    795,
+                                    399,
+                                    794,
+                                    424,
+                                    748,
+                                    421
+                                ],
+                                "text": "Day.",
+                                "confidence": 0.84
+                            }
+                        ]
+                    },
+                    {
+                        "boundingBox": [
+                            44,
+                            508,
+                            78,
+                            508,
+                            79,
+                            545,
+                            45,
+                            544
+                        ],
+                        "text": "C",
+                        "appearance": {
+                            "style": {
+                                "name": "other",
+                                "confidence": 0.972
+                            }
+                        },
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    46,
+                                    508,
+                                    67,
+                                    508,
+                                    67,
+                                    545,
+                                    45,
+                                    544
+                                ],
+                                "text": "C",
+                                "confidence": 0.986
+                            }
+                        ]
+                    },
+                    {
+                        "boundingBox": [
+                            80,
+                            513,
+                            549,
+                            511,
+                            549,
+                            540,
+                            80,
+                            543
+                        ],
+                        "text": "Listen and choose the best responses.",
+                        "appearance": {
+                            "style": {
+                                "name": "other",
+                                "confidence": 0.972
+                            }
+                        },
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    81,
+                                    518,
+                                    154,
+                                    515,
+                                    155,
+                                    543,
+                                    83,
+                                    544
+                                ],
+                                "text": "Listen",
+                                "confidence": 0.997
+                            },
+                            {
+                                "boundingBox": [
+                                    160,
+                                    515,
+                                    206,
+                                    513,
+                                    207,
+                                    542,
+                                    161,
+                                    543
+                                ],
+                                "text": "and",
+                                "confidence": 0.998
+                            },
+                            {
+                                "boundingBox": [
+                                    214,
+                                    513,
+                                    299,
+                                    512,
+                                    300,
+                                    541,
+                                    215,
+                                    542
+                                ],
+                                "text": "choose",
+                                "confidence": 0.997
+                            },
+                            {
+                                "boundingBox": [
+                                    305,
+                                    511,
+                                    348,
+                                    511,
+                                    348,
+                                    541,
+                                    306,
+                                    541
+                                ],
+                                "text": "the",
+                                "confidence": 0.998
+                            },
+                            {
+                                "boundingBox": [
+                                    353,
+                                    511,
+                                    409,
+                                    511,
+                                    410,
+                                    541,
+                                    354,
+                                    541
+                                ],
+                                "text": "best",
+                                "confidence": 0.991
+                            },
+                            {
+                                "boundingBox": [
+                                    415,
+                                    511,
+                                    549,
+                                    514,
+                                    550,
+                                    540,
+                                    415,
+                                    541
+                                ],
+                                "text": "responses.",
+                                "confidence": 0.994
+                            }
+                        ]
+                    },
+                    {
+                        "boundingBox": [
+                            824,
+                            518,
+                            888,
+                            518,
+                            887,
+                            537,
+                            824,
+                            536
+                        ],
+                        "text": "002-05",
+                        "appearance": {
+                            "style": {
+                                "name": "other",
+                                "confidence": 0.972
+                            }
+                        },
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    826,
+                                    519,
+                                    883,
+                                    519,
+                                    883,
+                                    538,
+                                    826,
+                                    536
+                                ],
+                                "text": "002-05",
+                                "confidence": 0.647
+                            }
+                        ]
+                    },
+                    {
+                        "boundingBox": [
+                            69,
+                            592,
+                            373,
+                            586,
+                            373,
+                            614,
+                            69,
+                            620
+                        ],
+                        "text": "What's your favorite holiday?",
+                        "appearance": {
+                            "style": {
+                                "name": "other",
+                                "confidence": 0.972
+                            }
+                        },
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    70,
+                                    593,
+                                    135,
+                                    591,
+                                    135,
+                                    618,
+                                    71,
+                                    620
+                                ],
+                                "text": "What's",
+                                "confidence": 0.955
+                            },
+                            {
+                                "boundingBox": [
+                                    140,
+                                    591,
+                                    187,
+                                    590,
+                                    187,
+                                    617,
+                                    141,
+                                    618
+                                ],
+                                "text": "your",
+                                "confidence": 0.989
+                            },
+                            {
+                                "boundingBox": [
+                                    192,
+                                    590,
+                                    271,
+                                    588,
+                                    272,
+                                    616,
+                                    193,
+                                    617
+                                ],
+                                "text": "favorite",
+                                "confidence": 0.996
+                            },
+                            {
+                                "boundingBox": [
+                                    277,
+                                    588,
+                                    372,
+                                    586,
+                                    372,
+                                    615,
+                                    277,
+                                    616
+                                ],
+                                "text": "holiday?",
+                                "confidence": 0.993
+                            }
+                        ]
+                    },
+                    {
+                        "boundingBox": [
+                            496,
+                            587,
+                            774,
+                            588,
+                            774,
+                            614,
+                            496,
+                            613
+                        ],
+                        "text": "· We give each other gifts.",
+                        "appearance": {
+                            "style": {
+                                "name": "other",
+                                "confidence": 0.972
+                            }
+                        },
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    498,
+                                    587,
+                                    514,
+                                    587,
+                                    513,
+                                    614,
+                                    497,
+                                    613
+                                ],
+                                "text": "·",
+                                "confidence": 0.884
+                            },
+                            {
+                                "boundingBox": [
+                                    523,
+                                    587,
+                                    559,
+                                    588,
+                                    558,
+                                    614,
+                                    522,
+                                    614
+                                ],
+                                "text": "We",
+                                "confidence": 0.998
+                            },
+                            {
+                                "boundingBox": [
+                                    564,
+                                    588,
+                                    608,
+                                    588,
+                                    607,
+                                    614,
+                                    563,
+                                    614
+                                ],
+                                "text": "give",
+                                "confidence": 0.991
+                            },
+                            {
+                                "boundingBox": [
+                                    613,
+                                    588,
+                                    663,
+                                    588,
+                                    662,
+                                    615,
+                                    612,
+                                    614
+                                ],
+                                "text": "each",
+                                "confidence": 0.991
+                            },
+                            {
+                                "boundingBox": [
+                                    668,
+                                    588,
+                                    722,
+                                    588,
+                                    721,
+                                    615,
+                                    667,
+                                    615
+                                ],
+                                "text": "other",
+                                "confidence": 0.998
+                            },
+                            {
+                                "boundingBox": [
+                                    727,
+                                    588,
+                                    774,
+                                    589,
+                                    774,
+                                    615,
+                                    726,
+                                    615
+                                ],
+                                "text": "gifts.",
+                                "confidence": 0.991
+                            }
+                        ]
+                    },
+                    {
+                        "boundingBox": [
+                            39,
+                            668,
+                            62,
+                            669,
+                            62,
+                            690,
+                            39,
+                            689
+                        ],
+                        "text": "2",
+                        "appearance": {
+                            "style": {
+                                "name": "other",
+                                "confidence": 0.972
+                            }
+                        },
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    43,
+                                    668,
+                                    55,
+                                    669,
+                                    54,
+                                    690,
+                                    42,
+                                    689
+                                ],
+                                "text": "2",
+                                "confidence": 0.995
+                            }
+                        ]
+                    },
+                    {
+                        "boundingBox": [
+                            69,
+                            665,
+                            374,
+                            661,
+                            375,
+                            689,
+                            69,
+                            693
+                        ],
+                        "text": "What do you do on that day?",
+                        "appearance": {
+                            "style": {
+                                "name": "other",
+                                "confidence": 0.972
+                            }
+                        },
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    71,
+                                    666,
+                                    119,
+                                    665,
+                                    119,
+                                    693,
+                                    70,
+                                    693
+                                ],
+                                "text": "What",
+                                "confidence": 0.979
+                            },
+                            {
+                                "boundingBox": [
+                                    125,
+                                    665,
+                                    151,
+                                    665,
+                                    150,
+                                    692,
+                                    124,
+                                    693
+                                ],
+                                "text": "do",
+                                "confidence": 0.998
+                            },
+                            {
+                                "boundingBox": [
+                                    156,
+                                    665,
+                                    194,
+                                    664,
+                                    193,
+                                    692,
+                                    155,
+                                    692
+                                ],
+                                "text": "you",
+                                "confidence": 0.998
+                            },
+                            {
+                                "boundingBox": [
+                                    200,
+                                    664,
+                                    227,
+                                    664,
+                                    226,
+                                    692,
+                                    199,
+                                    692
+                                ],
+                                "text": "do",
+                                "confidence": 0.998
+                            },
+                            {
+                                "boundingBox": [
+                                    233,
+                                    664,
+                                    260,
+                                    663,
+                                    259,
+                                    691,
+                                    232,
+                                    692
+                                ],
+                                "text": "on",
+                                "confidence": 0.998
+                            },
+                            {
+                                "boundingBox": [
+                                    266,
+                                    663,
+                                    309,
+                                    662,
+                                    308,
+                                    691,
+                                    265,
+                                    691
+                                ],
+                                "text": "that",
+                                "confidence": 0.991
+                            },
+                            {
+                                "boundingBox": [
+                                    315,
+                                    662,
+                                    373,
+                                    661,
+                                    372,
+                                    690,
+                                    314,
+                                    691
+                                ],
+                                "text": "day?",
+                                "confidence": 0.981
+                            }
+                        ]
+                    },
+                    {
+                        "boundingBox": [
+                            497,
+                            661,
+                            851,
+                            660,
+                            852,
+                            687,
+                            497,
+                            688
+                        ],
+                        "text": "· My favorite holiday is Christmas.",
+                        "appearance": {
+                            "style": {
+                                "name": "other",
+                                "confidence": 0.972
+                            }
+                        },
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    499,
+                                    662,
+                                    514,
+                                    662,
+                                    514,
+                                    688,
+                                    498,
+                                    688
+                                ],
+                                "text": "·",
+                                "confidence": 0.687
+                            },
+                            {
+                                "boundingBox": [
+                                    522,
+                                    662,
+                                    555,
+                                    661,
+                                    555,
+                                    688,
+                                    521,
+                                    688
+                                ],
+                                "text": "My",
+                                "confidence": 0.996
+                            },
+                            {
+                                "boundingBox": [
+                                    561,
+                                    661,
+                                    637,
+                                    661,
+                                    637,
+                                    688,
+                                    561,
+                                    688
+                                ],
+                                "text": "favorite",
+                                "confidence": 0.996
+                            },
+                            {
+                                "boundingBox": [
+                                    642,
+                                    661,
+                                    715,
+                                    661,
+                                    715,
+                                    688,
+                                    642,
+                                    688
+                                ],
+                                "text": "holiday",
+                                "confidence": 0.997
+                            },
+                            {
+                                "boundingBox": [
+                                    720,
+                                    661,
+                                    736,
+                                    661,
+                                    736,
+                                    688,
+                                    720,
+                                    688
+                                ],
+                                "text": "is",
+                                "confidence": 0.998
+                            },
+                            {
+                                "boundingBox": [
+                                    741,
+                                    661,
+                                    851,
+                                    661,
+                                    852,
+                                    688,
+                                    742,
+                                    688
+                                ],
+                                "text": "Christmas.",
+                                "confidence": 0.965
+                            }
+                        ]
+                    },
+                    {
+                        "boundingBox": [
+                            37,
+                            741,
+                            57,
+                            741,
+                            57,
+                            763,
+                            38,
+                            763
+                        ],
+                        "text": "3",
+                        "appearance": {
+                            "style": {
+                                "name": "other",
+                                "confidence": 0.972
+                            }
+                        },
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    41,
+                                    741,
+                                    54,
+                                    741,
+                                    54,
+                                    763,
+                                    41,
+                                    763
+                                ],
+                                "text": "3",
+                                "confidence": 0.994
+                            }
+                        ]
+                    },
+                    {
+                        "boundingBox": [
+                            68,
+                            737,
+                            441,
+                            737,
+                            441,
+                            766,
+                            68,
+                            766
+                        ],
+                        "text": "What do people do on that day? ·",
+                        "appearance": {
+                            "style": {
+                                "name": "other",
+                                "confidence": 0.972
+                            }
+                        },
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    68,
+                                    738,
+                                    117,
+                                    738,
+                                    117,
+                                    767,
+                                    68,
+                                    767
+                                ],
+                                "text": "What",
+                                "confidence": 0.991
+                            },
+                            {
+                                "boundingBox": [
+                                    123,
+                                    738,
+                                    148,
+                                    738,
+                                    147,
+                                    767,
+                                    123,
+                                    767
+                                ],
+                                "text": "do",
+                                "confidence": 0.998
+                            },
+                            {
+                                "boundingBox": [
+                                    153,
+                                    738,
+                                    225,
+                                    738,
+                                    225,
+                                    767,
+                                    153,
+                                    767
+                                ],
+                                "text": "people",
+                                "confidence": 0.995
+                            },
+                            {
+                                "boundingBox": [
+                                    231,
+                                    738,
+                                    259,
+                                    738,
+                                    259,
+                                    767,
+                                    230,
+                                    767
+                                ],
+                                "text": "do",
+                                "confidence": 0.998
+                            },
+                            {
+                                "boundingBox": [
+                                    265,
+                                    738,
+                                    294,
+                                    738,
+                                    293,
+                                    767,
+                                    264,
+                                    767
+                                ],
+                                "text": "on",
+                                "confidence": 0.998
+                            },
+                            {
+                                "boundingBox": [
+                                    299,
+                                    738,
+                                    343,
+                                    738,
+                                    342,
+                                    767,
+                                    298,
+                                    767
+                                ],
+                                "text": "that",
+                                "confidence": 0.987
+                            },
+                            {
+                                "boundingBox": [
+                                    349,
+                                    738,
+                                    409,
+                                    737,
+                                    408,
+                                    767,
+                                    348,
+                                    767
+                                ],
+                                "text": "day?",
+                                "confidence": 0.991
+                            },
+                            {
+                                "boundingBox": [
+                                    426,
+                                    737,
+                                    440,
+                                    737,
+                                    439,
+                                    767,
+                                    425,
+                                    767
+                                ],
+                                "text": "·",
+                                "confidence": 0.19
+                            }
+                        ]
+                    },
+                    {
+                        "boundingBox": [
+                            495,
+                            735,
+                            880,
+                            733,
+                            880,
+                            762,
+                            495,
+                            764
+                        ],
+                        "text": "· People eat turkey and pumpkin pie.",
+                        "appearance": {
+                            "style": {
+                                "name": "other",
+                                "confidence": 0.972
+                            }
+                        },
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    497,
+                                    736,
+                                    515,
+                                    736,
+                                    515,
+                                    764,
+                                    497,
+                                    764
+                                ],
+                                "text": "·",
+                                "confidence": 0.902
+                            },
+                            {
+                                "boundingBox": [
+                                    523,
+                                    736,
+                                    597,
+                                    736,
+                                    597,
+                                    764,
+                                    523,
+                                    764
+                                ],
+                                "text": "People",
+                                "confidence": 0.996
+                            },
+                            {
+                                "boundingBox": [
+                                    603,
+                                    736,
+                                    636,
+                                    736,
+                                    636,
+                                    764,
+                                    603,
+                                    764
+                                ],
+                                "text": "eat",
+                                "confidence": 0.998
+                            },
+                            {
+                                "boundingBox": [
+                                    641,
+                                    736,
+                                    704,
+                                    735,
+                                    704,
+                                    764,
+                                    641,
+                                    764
+                                ],
+                                "text": "turkey",
+                                "confidence": 0.997
+                            },
+                            {
+                                "boundingBox": [
+                                    710,
+                                    735,
+                                    746,
+                                    735,
+                                    747,
+                                    764,
+                                    710,
+                                    764
+                                ],
+                                "text": "and",
+                                "confidence": 0.998
+                            },
+                            {
+                                "boundingBox": [
+                                    752,
+                                    735,
+                                    837,
+                                    734,
+                                    838,
+                                    763,
+                                    752,
+                                    764
+                                ],
+                                "text": "pumpkin",
+                                "confidence": 0.996
+                            },
+                            {
+                                "boundingBox": [
+                                    842,
+                                    734,
+                                    880,
+                                    734,
+                                    881,
+                                    762,
+                                    843,
+                                    762
+                                ],
+                                "text": "pie.",
+                                "confidence": 0.97
+                            }
+                        ]
+                    },
+                    {
+                        "boundingBox": [
+                            118,
+                            882,
+                            244,
+                            885,
+                            243,
+                            916,
+                            117,
+                            911
+                        ],
+                        "text": "Listening",
+                        "appearance": {
+                            "style": {
+                                "name": "other",
+                                "confidence": 0.972
+                            }
+                        },
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    119,
+                                    882,
+                                    242,
+                                    886,
+                                    242,
+                                    916,
+                                    118,
+                                    912
+                                ],
+                                "text": "Listening",
+                                "confidence": 0.994
+                            }
+                        ]
+                    },
+                    {
+                        "boundingBox": [
+                            118,
+                            910,
+                            363,
+                            906,
+                            364,
+                            966,
+                            118,
+                            968
+                        ],
+                        "text": "Check up 1",
+                        "appearance": {
+                            "style": {
+                                "name": "other",
+                                "confidence": 0.972
+                            }
+                        },
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    120,
+                                    916,
+                                    240,
+                                    916,
+                                    240,
+                                    968,
+                                    118,
+                                    966
+                                ],
+                                "text": "Check",
+                                "confidence": 0.998
+                            },
+                            {
+                                "boundingBox": [
+                                    250,
+                                    916,
+                                    310,
+                                    911,
+                                    311,
+                                    968,
+                                    250,
+                                    968
+                                ],
+                                "text": "up",
+                                "confidence": 0.998
+                            },
+                            {
+                                "boundingBox": [
+                                    328,
+                                    910,
+                                    359,
+                                    907,
+                                    361,
+                                    968,
+                                    329,
+                                    968
+                                ],
+                                "text": "1",
+                                "confidence": 0.998
+                            }
+                        ]
+                    },
+                    {
+                        "boundingBox": [
+                            35,
+                            1009,
+                            58,
+                            1011,
+                            57,
+                            1036,
+                            35,
+                            1035
+                        ],
+                        "text": "A",
+                        "appearance": {
+                            "style": {
+                                "name": "other",
+                                "confidence": 0.972
+                            }
+                        },
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    40,
+                                    1009,
+                                    55,
+                                    1010,
+                                    53,
+                                    1036,
+                                    38,
+                                    1035
+                                ],
+                                "text": "A",
+                                "confidence": 0.966
+                            }
+                        ]
+                    },
+                    {
+                        "boundingBox": [
+                            72,
+                            1014,
+                            705,
+                            1014,
+                            705,
+                            1053,
+                            72,
+                            1053
+                        ],
+                        "text": "Listen and choose the best description for the picture.",
+                        "appearance": {
+                            "style": {
+                                "name": "other",
+                                "confidence": 0.972
+                            }
+                        },
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    73,
+                                    1016,
+                                    135,
+                                    1019,
+                                    134,
+                                    1047,
+                                    72,
+                                    1044
+                                ],
+                                "text": "Listen",
+                                "confidence": 0.994
+                            },
+                            {
+                                "boundingBox": [
+                                    141,
+                                    1019,
+                                    184,
+                                    1020,
+                                    184,
+                                    1049,
+                                    140,
+                                    1048
+                                ],
+                                "text": "and",
+                                "confidence": 0.998
+                            },
+                            {
+                                "boundingBox": [
+                                    190,
+                                    1021,
+                                    274,
+                                    1023,
+                                    274,
+                                    1052,
+                                    190,
+                                    1050
+                                ],
+                                "text": "choose",
+                                "confidence": 0.997
+                            },
+                            {
+                                "boundingBox": [
+                                    280,
+                                    1023,
+                                    319,
+                                    1023,
+                                    320,
+                                    1053,
+                                    280,
+                                    1052
+                                ],
+                                "text": "the",
+                                "confidence": 0.998
+                            },
+                            {
+                                "boundingBox": [
+                                    325,
+                                    1023,
+                                    380,
+                                    1023,
+                                    381,
+                                    1054,
+                                    325,
+                                    1053
+                                ],
+                                "text": "best",
+                                "confidence": 0.988
+                            },
+                            {
+                                "boundingBox": [
+                                    386,
+                                    1023,
+                                    523,
+                                    1022,
+                                    524,
+                                    1052,
+                                    386,
+                                    1054
+                                ],
+                                "text": "description",
+                                "confidence": 0.993
+                            },
+                            {
+                                "boundingBox": [
+                                    529,
+                                    1022,
+                                    563,
+                                    1020,
+                                    564,
+                                    1051,
+                                    530,
+                                    1052
+                                ],
+                                "text": "for",
+                                "confidence": 0.998
+                            },
+                            {
+                                "boundingBox": [
+                                    568,
+                                    1020,
+                                    608,
+                                    1019,
+                                    609,
+                                    1050,
+                                    570,
+                                    1051
+                                ],
+                                "text": "the",
+                                "confidence": 0.998
+                            },
+                            {
+                                "boundingBox": [
+                                    613,
+                                    1019,
+                                    704,
+                                    1014,
+                                    706,
+                                    1045,
+                                    615,
+                                    1049
+                                ],
+                                "text": "picture.",
+                                "confidence": 0.994
+                            }
+                        ]
+                    },
+                    {
+                        "boundingBox": [
+                            838,
+                            1013,
+                            902,
+                            1011,
+                            903,
+                            1029,
+                            838,
+                            1032
+                        ],
+                        "text": "0 02-06",
+                        "appearance": {
+                            "style": {
+                                "name": "other",
+                                "confidence": 0.972
+                            }
+                        },
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    841,
+                                    1014,
+                                    852,
+                                    1013,
+                                    852,
+                                    1032,
+                                    841,
+                                    1033
+                                ],
+                                "text": "0",
+                                "confidence": 0.012
+                            },
+                            {
+                                "boundingBox": [
+                                    856,
+                                    1013,
+                                    901,
+                                    1011,
+                                    902,
+                                    1030,
+                                    856,
+                                    1032
+                                ],
+                                "text": "02-06",
+                                "confidence": 0.995
+                            }
+                        ]
+                    },
+                    {
+                        "boundingBox": [
+                            538,
+                            1248,
+                            556,
+                            1247,
+                            556,
+                            1263,
+                            538,
+                            1264
+                        ],
+                        "text": "a.",
+                        "appearance": {
+                            "style": {
+                                "name": "other",
+                                "confidence": 0.972
+                            }
+                        },
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    538,
+                                    1248,
+                                    554,
+                                    1247,
+                                    555,
+                                    1263,
+                                    539,
+                                    1264
+                                ],
+                                "text": "a.",
+                                "confidence": 0.471
+                            }
+                        ]
+                    },
+                    {
+                        "boundingBox": [
+                            672,
+                            1233,
+                            694,
+                            1234,
+                            693,
+                            1256,
+                            671,
+                            1254
+                        ],
+                        "text": "b.",
+                        "appearance": {
+                            "style": {
+                                "name": "other",
+                                "confidence": 0.972
+                            }
+                        },
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    672,
+                                    1233,
+                                    692,
+                                    1234,
+                                    691,
+                                    1256,
+                                    671,
+                                    1254
+                                ],
+                                "text": "b.",
+                                "confidence": 0.993
+                            }
+                        ]
+                    },
+                    {
+                        "boundingBox": [
+                            802,
+                            1227,
+                            823,
+                            1227,
+                            823,
+                            1248,
+                            802,
+                            1247
+                        ],
+                        "text": "C.",
+                        "appearance": {
+                            "style": {
+                                "name": "other",
+                                "confidence": 0.945
+                            }
+                        },
+                        "words": [
+                            {
+                                "boundingBox": [
+                                    803,
+                                    1227,
+                                    823,
+                                    1227,
+                                    822,
+                                    1248,
+                                    803,
+                                    1247
+                                ],
+                                "text": "C.",
+                                "confidence": 0.994
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}
