@@ -1,5 +1,7 @@
 <script setup>
-
+onMounted(() => {
+  sessionStorage.redirect = location.href;
+})
 </script>
 
 <template>
