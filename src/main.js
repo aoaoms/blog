@@ -47,7 +47,9 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   }
 // app.use(createPinia())
 app.use(createRouter({
-    history: createWebHistory(),
+    history: createWebHistory(
+        import.meta.env.BASE_URL
+    ),
     routes: layoutRoutes,
 })).use(VueKonva)
 
