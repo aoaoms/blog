@@ -1,35 +1,12 @@
 # aoaoms
 
-This template should help get you started developing with Vue 3 in Vite.
+这是aoaobaba的博客站点
 
-## Recommended IDE Setup
+* 使用vite构建静态站点（包括集成md pages router等）
+* 发布在github page，使用自有域名aoaoms.com
+* 部署github page 使用deploy from brance （关键：使用[gh-pages ](https://github.com/tschaub/gh-pages "gh-pages")库）
+* 关键：添加index.html处理单页路由脚本和404.html
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+如果使用github page action 部署，可以按照上面第四点添加代码，以解决单页应用路由404问题。
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+`"deploy": "gh-pages -d dist build --repo https://github.com/aoaoms/blog.git"`

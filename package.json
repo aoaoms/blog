@@ -1,11 +1,12 @@
 {
   "name": "aoaoms",
   "version": "0.0.0",
-  "private": false,
+  "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "deploy": "gh-pages -d dist build --repo https://github.com/aoaoms/blog.git",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
@@ -45,6 +46,7 @@
     "eslint": "^8.49.0",
     "eslint-plugin-vue": "^9.17.0",
     "fs-extra": "^11.2.0",
+    "gh-pages": "^6.1.1",
     "gray-matter": "^4.0.3",
     "prettier": "^3.0.3",
     "sass": "^1.71.1",
