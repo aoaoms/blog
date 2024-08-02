@@ -1,0 +1,1 @@
+import{b as o}from"./route-block-B_A1xBdJ.js";import{_ as e,o as n,c as t}from"./index-hMUs2JBo.js";const c={};function _(r,f){return n(),t("div",null," not-found ")}typeof o=="function"&&o(c);const l=e(c,[["render",_]]);export{l as default};

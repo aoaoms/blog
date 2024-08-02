@@ -1,0 +1,1 @@
+import{_ as a,a as c,b as _}from"./Header-BM5G-vQX.js";import{_ as r,a1 as m,o as i,c as p,a as o,d,F as l}from"./index-hMUs2JBo.js";const f={},u={class:"position-absolute bottom-0 start-50"};function x(B,V){const e=a,t=m("RouterView"),n=c,s=_;return i(),p(l,null,[o(e),o(t),o(n),d("div",u,[o(s)])],64)}const F=r(f,[["render",x]]);export{F as default};
