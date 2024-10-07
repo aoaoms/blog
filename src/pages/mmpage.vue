@@ -10,6 +10,9 @@ import ttsvoice from '@/json/ttsvoices.json'
 import { db } from '@/db'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
+import { useRouter } from 'vue-router'
+import { computed, inject, reactive, ref } from 'vue'
+
 const $kit = inject('kit')
 const edgeTts = new MsEdgeTTS()
 const activeTab = ref('common')
@@ -55,6 +58,17 @@ const loading = ref(false)
 const ratio = ref()
 // 画布引用
 const stage = ref()
+
+// 自由框定
+const freeSelectRect = ref()
+const freeSelectRectInfo = ref('随意拖动位置，确定框定区域.')
+const freeSelectRectScaleX = ref()
+const freeSelectRectScaleY = ref()
+const freeSelectRectEndWidth = ref()
+const freeSelectRectEndHeight = ref()
+const SetFreeSelectRectInfo = (x, y, transformWidth, transformHeight, width, height) => {
+  freeSelectRectInfo.value = `x:${x.toFixed(2)},\ny:${y.toFixed(2)},\ntransformWidth:${transformWidth.toFixed(2)},\ntransformHeight:${transformHeight.toFixed(2)},\nwidth:${width.toFixed(2)},\nheight:${height.toFixed(2)}`
+}
 
 // 矩形框定
 const SelectRect = ref()
@@ -108,7 +122,58 @@ const getFramedText = () => {
 
 // 添加到页面
 const addToPage = async () => {
-  if (SelectRect.value) {
+  if (freeSelectRect.value && freeSelectRect.value !== 'undefined') {
+    let newContent = {
+      boundingPolygon: [
+        {
+          x: freeSelectRect.value.x().toFixed(2) / ratio.value,
+          y: freeSelectRect.value.y().toFixed(2) / ratio.value
+        },
+        {
+          x: (freeSelectRect.value.x() + freeSelectRect.value.width()) / ratio.value,
+          y: freeSelectRect.value.y() / ratio.value
+        },
+        {
+          x: (freeSelectRect.value.x() + freeSelectRect.value.width()) / ratio.value,
+          y: (freeSelectRect.value.y() + freeSelectRect.value.height()) / ratio.value
+        },
+        {
+          x: freeSelectRect.value.x() / ratio.value,
+          y: (freeSelectRect.value.y() + freeSelectRect.value.height()) / ratio.value
+        }
+      ],
+      designWidth: canvasWidth.value,
+      designHeight: canvasHeight.value,
+      width: freeSelectRectEndWidth.value,
+      height: freeSelectRectEndHeight.value,
+      text: ttsText.value,
+      audio: '',
+      audioName: shortid.generate(),
+      // 原文本语言
+      langfrom: '',
+      // 翻译文本语言
+      langto: '',
+      // 原文本翻译结果
+      translateText: '',
+      // 原文本翻译后音频结果
+      translateAudio: '',
+      // 翻译文本翻译后音频文件名
+      translateAudioName: shortid.generate()
+    }
+    page.content.push(newContent)
+    // page.image = originalImage
+    await savePageData()
+    console.log(JSON.stringify(page))
+    // dialogTitle.value = '成功'
+    // dialogVisible.value = true
+    // dialogContent.value = '添加成功'
+    ElMessage({
+      message: '添加成功',
+      type: 'success'
+    })
+  }
+
+  if (SelectRect.value && SelectRect.value !== 'undefined') {
     let newContent = {
       boundingPolygon: [
         {
@@ -157,10 +222,6 @@ const addToPage = async () => {
       message: '添加成功',
       type: 'success'
     })
-  } else {
-    dialogTitle.value = '错误'
-    dialogVisible.value = true
-    dialogContent.value = '请框定文本设置按钮'
   }
 }
 // bing 翻译
@@ -595,6 +656,61 @@ const loadImage = () => {
   input.click()
 }
 
+// 初始化一个自由框定器
+const initFreeSelectRect = () => {
+  console.log('initFreeSelectRect', freeSelectRect.value)
+  // 如果存在选择器 则退出
+  if (freeSelectRect.value) {
+    return
+  }
+  // 画选择器
+  freeSelectRect.value = new Konva.Rect({
+    x: 100,
+    y: 100,
+    width: 100,
+    height: 100,
+    fill: 'transparent',
+    stroke: 'black',
+    strokeWidth: 1,
+    draggable: true
+  })
+
+  let tr = new Konva.Transformer({
+    resizeEnabled: true,
+    rotateEnabled: false
+  })
+  tr.nodes([freeSelectRect.value])
+  tr.on('transform', function (e) {
+    // console.log('------------transform----------------', e, e.target.attrs.height * e.target.attrs.scaleY)
+    freeSelectRectScaleX.value = e.target.attrs.scaleX
+    freeSelectRectScaleY.value = e.target.attrs.scaleY
+    freeSelectRectEndWidth.value = e.target.attrs.width * e.target.attrs.scaleX
+    freeSelectRectEndHeight.value = e.target.attrs.height * e.target.attrs.scaleY
+    SetFreeSelectRectInfo(
+      freeSelectRect.value.x(),
+      freeSelectRect.value.y(),
+      freeSelectRect.value.width() * e.target.attrs.scaleX,
+      freeSelectRect.value.height() * e.target.attrs.scaleY,
+      freeSelectRect.value.width(),
+      freeSelectRect.value.height()
+    )
+  })
+  tr.on('dragmove', function (e) {
+    SetFreeSelectRectInfo(
+      freeSelectRect.value.x(),
+      freeSelectRect.value.y(),
+      freeSelectRect.value.width() * e.target.attrs.scaleX,
+      freeSelectRect.value.height() * e.target.attrs.scaleY,
+      freeSelectRect.value.width(),
+      freeSelectRect.value.height()
+    )
+  })
+
+  stage.value.getLayers()[0].add(tr)
+  stage.value.getLayers()[0].add(freeSelectRect.value)
+  stage.value.draw()
+}
+
 // 构建画布对象
 const buildCanvas = () => {
   if (stage.value) {
@@ -660,12 +776,12 @@ async function savePageData() {
 const clearAllAudio = async () => {
   page.content.forEach((item) => {
     item.audio = '',
-    item.translateAudio = ''
+      item.translateAudio = ''
   })
 
   ElMessage({
     message: '清空成功',
-    type:'success'
+    type: 'success'
   })
   // localStorage.setItem('page', JSON.stringify(page))
   await savePageData()
@@ -716,7 +832,7 @@ const drawRectTextOutlines = () => {
   if (stage.value.getLayers()[0].find('Rect').length > 0) {
     alert('已存在的框定，暂无法操作。如果需要重载，请更换图片。')
     return
-    
+
     // console.log('getTransform ----------', stage.value.getLayers()[0].find('Transformer'))
 
     // // stage.value.getLayers()[0].find('Shape').forEach((item) => {
@@ -769,7 +885,7 @@ const drawRectTextOutlines = () => {
         stage.value.getLayers()[0].add(rectItem)
         stage.value.draw()
       })
-      
+
       // 画选择器
       SelectRect.value = new Konva.Rect({
         x: 100,
@@ -824,9 +940,6 @@ const drawRectTextOutlines = () => {
   }
 }
 
-import { useRouter } from 'vue-router'
-import { inject, reactive, ref } from 'vue'
-import { fa } from 'element-plus/es/locales.mjs'
 const router = useRouter()
 // 预览页面
 const previewPage = async () => {
@@ -896,7 +1009,7 @@ const playItemAudio = (index) => {
     audio.play()
     audio.addEventListener('ended', () => {
       // 如果翻译音频存在 则播放翻译音频
-      if (page.content[index].translateAudio && page.content[index].translateAudio !== '') {
+      if (page.content[index].translateText !== '' && page.content[index].translateAudio !== '') {
         let audio2 = new Audio(page.content[index].translateAudio)
         audio2.play()
       }
@@ -1106,6 +1219,11 @@ const ocrAnalyzeImage = () => {
       })
   }
 }
+
+// 活动的框定信息
+const ActiveSelectRectInfo = computed(() => {
+  return freeSelectRect.value ? freeSelectRectInfo.value : SelectRectInfo.value
+})
 </script>
 
 <route lang="yaml">
@@ -1127,9 +1245,9 @@ meta:
   cursor: grabbing;
 }
 
-.el-card__header {
+/* .el-card__header {
   padding: 5px !important;
-}
+} */
 
 .el_card__body {
   padding: 5px 2px !important;
@@ -1152,13 +1270,18 @@ meta:
 }
 </style>
 
+<style>
+.el-card__header {
+  padding: 5px !important;
+}
+</style>
+
 <template>
   <div v-loading="loading">
     <audio id="idaudio" controls src="" class="visually-hidden"></audio>
     <div class="z-3 position-fixed d-flex justify-content-center align-items-center" style="bottom: 50px; right: 60px">
-      <el-tooltip class="box-item" effect="light"
-        content="<span>所有数据仅存储在本地。<br/>客户端仅用于设计和接口数据转发服务。</span>" placement="top"
-        raw-content>
+      <el-tooltip class="box-item" effect="light" content="<span>所有数据仅存储在本地。<br/>客户端仅用于设计和接口数据转发服务。</span>"
+        placement="top" raw-content>
         <el-icon size="45x45" color="#999">
           <InfoFilled />
         </el-icon>
@@ -1181,6 +1304,11 @@ meta:
         <el-tooltip class="box-item" effect="light" content="载入图片" placement="bottom">
           <el-button icon="DocumentAdd" class="p-2" type="" siz="large" text @click="loadImage"></el-button>
         </el-tooltip>
+
+        <el-tooltip class="box-item" effect="light" content="初始化自由框定器" placement="bottom">
+          <el-button icon="Crop" class="p-2" type="" siz="large" text @click="initFreeSelectRect"></el-button>
+        </el-tooltip>
+
         <el-tooltip class="box-item" effect="light" content="OCR识别" placement="bottom">
           <el-button icon="DataAnalysis" class="p-2" type="" siz="large" text @click="ocrAnalyzeImage"></el-button>
         </el-tooltip>
@@ -1190,7 +1318,7 @@ meta:
 
         <span class="mx-3 d-inline-block" style="font-size: 14px; color: #999">图片：{{ imgtW }} x {{ imgtH }}</span>
         <span class="d-inline-block" style="font-size: 14px; color: #999">画布宽高比：3:4</span>
-        
+
         <!-- <el-badge value="语音合成" class="item">
           <el-button icon="Medal" class="p-2 mx-2" type="" siz="large"
           @click="enhanceOnlineSpeechSynthesis"></el-button>
@@ -1242,7 +1370,7 @@ meta:
                   <el-tooltip class="box-item" effect="light" content="online语音合成" placement="right">
                     <el-button icon="Operation" class="p-2" type="" siz="large" text
                       @click="OnlineSpeechSynthesis"></el-button>
-                  </el-tooltip>                  
+                  </el-tooltip>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -1251,14 +1379,15 @@ meta:
 
         <div class="overflow-auto px-0" style="height: 40vh">
           <div v-for="(item, index) in page.content" :key="index" class="d-flex justify-content-start align-items-start"
-            :class="[enhanceAudioSettingItemIndex === index ? 'border border-primary': '']">
-            <el-button icon="VideoPlay" class="p-2" :type="item.audio === '' || item.translateAudio === '' ? 'warning' : 'success'"
-              siz="large" text @click="playItemAudio(index)"></el-button>
+            :class="[enhanceAudioSettingItemIndex === index ? 'border border-primary' : '']">
+            <el-button icon="VideoPlay" class="p-2"
+              :type="item.audio === '' || item.translateAudio === '' ? 'warning' : 'success'" siz="large" text
+              @click="playItemAudio(index)"></el-button>
             <div class="d-flex flex-column justify-content-start align-items-center">
               <el-text class="w-100 d-inline-block" truncated>
                 <span class="btn text-start m-0 p-0" @click="enhanceAudioSetting(index)">{{
                   item.text
-                  }}</span>
+                }}</span>
               </el-text>
               <el-text v-if="item.translateText !== ''" class="d-inline-block w-100" truncated>
                 <span class="btn text-start m-0 p-0" style="font-size: 14px;">
@@ -1282,7 +1411,7 @@ meta:
               <el-input size="small" v-model="ttsText" :rows="5" type="textarea" placeholder="" />
             </el-tab-pane>
             <el-tab-pane label="框定信息">
-              <el-input size="small" readonly v-model="SelectRectInfo" :rows="5" type="textarea" placeholder="" />
+              <el-input size="small" readonly v-model="ActiveSelectRectInfo" :rows="5" type="textarea" placeholder="" />
             </el-tab-pane>
           </el-tabs>
         </template>
