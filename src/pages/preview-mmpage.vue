@@ -80,11 +80,17 @@ const loadPage = async () => {
             })
             layer.add(rect)
             rect.on('click', () => {
-                btnText.value = item.text
+                btnText.value = item.text + ' ' + item.translateText
                 // 播放音频
                 const audio = document.getElementById('idaudio')
                 audio.src = item.audio
                 audio.play()
+                audio.onended = () => {
+                  if (item.translateAudio && item.translateAudio.length > 0) {
+                    let audioT = new Audio(item.translateAudio)
+                     audioT.play()
+                  }                 
+                }
             })
         })
 

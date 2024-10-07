@@ -1,4 +1,3 @@
-import { translate } from 'element-plus';
 import { saveAs } from 'file-saver'
 import JSZip from 'jszip'
 
@@ -19,14 +18,19 @@ function downloadDesignPage(page) {
     // 实例化一个zip
     let zip = new JSZip()
     let pageF = zip.folder('/')
-    pageF.file('image.jpeg', dataURItoBlob(page.image.base64))
+    pageF.file('image.jpg', dataURItoBlob(page.image.base64))
     let json = {}
     json.content = []
     json.image = {}
     // 音频文件
     page.content.forEach(item => {
         if (item.audio !== '') {
-            pageF.file(item.audioName + '.mp3', dataURItoBlob(item.audio))
+            // 如果文件名有后缀 则直接保存 否则加上后缀 mp3
+            if (item.audioName.indexOf('.') !== -1) {
+                pageF.file(item.audioName, dataURItoBlob(item.audio))
+            } else {            
+                pageF.file(item.audioName + '.mp3', dataURItoBlob(item.audio))
+            }
         }
         if (item.translateAudio !== '') {
             pageF.file(item.translateAudioName + '.mp3', dataURItoBlob(item.translateAudio))

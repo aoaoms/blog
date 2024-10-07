@@ -1,6 +1,6 @@
 import '@/assets/css/main.css'
 
-// import { createApp } from 'vue'
+import { createApp } from 'vue'
 // import { createPinia } from 'pinia'
 
 // Import our custom CSS
