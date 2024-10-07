@@ -359,15 +359,15 @@ const audioOption = reactive({
 // 在线语音合成
 const OnlineSpeechSynthesis = () => {
   // 如果不是EDGE浏览器 则不支持在线语音合成
-  console.log(navigator.userAgent)
+  // console.log(navigator.userAgent)
   if (navigator.userAgent.indexOf('Edg') === -1) {
-    ElMessageBox.alert('当前浏览器不支持在线语音合成，请使用Edge浏览器！', '提示', {
+    ElMessageBox.alert('非edge浏览器仅支持部分角色的在线音频合成，推荐使用Edge浏览器！', '提示', {
       confirmButtonText: '确定',
       callback: () => {
         console.log('close')
       }
     })
-    return
+    // return
   }
   audioSettingDialogVisible.value = true
 }
