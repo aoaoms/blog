@@ -240,7 +240,7 @@ const enhanceAudioOption = reactive({
   originalTextVoiceVolume: 'default',
   originalTextVoiceSpeed: 'default',
   originalTextVoicePitch: 'default',
-  translateTextvoice: 'en-US-JessaNeural',
+  translateTextvoice: 'en-US-EmmaMultilingualNeural',
   translateTextlang: 'en-US',
   translateTextVoiceVolume: 'default',
   translateTextVoiceSpeed: 'default',
@@ -248,7 +248,7 @@ const enhanceAudioOption = reactive({
 })
 const translateOption = reactive({
   langfrom: null,
-  langto: '',
+  langto: 'zh-hans',
   translateText: ''
 })
 const translateResult = reactive({
@@ -299,13 +299,13 @@ const translateText = async (index) => {
 const updateTranslateText = () => {
   page.content[enhanceAudioSettingItemIndex.value].translateText = translateResult.translateText
   page.content[enhanceAudioSettingItemIndex.value].langfrom = translateResult.langfrom
-  page.content[enhanceAudioSettingItemIndex.value].langto = translateResult.langto
+  page.content[enhanceAudioSettingItemIndex.value].langto = translateResult.langto?? 'zh-hans'
 
   console.log(page.content[enhanceAudioSettingItemIndex.value])
 }
 
-// 增强的文字音频数据内容生成
-const enhanceAudioContentCreate = async () => {
+// 增强的文字音频数据内容生成 original translate both
+const enhanceAudioContentCreate = async (type) => {
   if (!page.content[enhanceAudioSettingItemIndex.value]) {
     return
   }
@@ -313,9 +313,27 @@ const enhanceAudioContentCreate = async () => {
   let text = page.content[enhanceAudioSettingItemIndex.value].text
   let translateText = page.content[enhanceAudioSettingItemIndex.value].translateText
 
+  // 未设置音频选项
+  if (type === 'original' && enhanceAudioOption.originalTextvoice === '') {
+    ElMessage.warning('请设置语音播报选项！')
+    return
+  }
+  if (type === 'translate' && enhanceAudioOption.translateTextvoice === '') {
+    ElMessage.warning('请设置翻译语音播报选项！')
+    return
+  }
+  if (type === 'both' && (enhanceAudioOption.originalTextvoice === '' || enhanceAudioOption.translateTextvoice === '')) {
+    ElMessage.warning('请设置所有语音播报选项！')
+    return
+  }
+
+  if (type === 'original' && text === '') return
+  if (type === 'translate' &&  translateText === '') return
+  if (type === 'both' && (text === '' || translateText === '')) return
   // 原文本音频合成
-  let originalTextAudioPromise = new Promise(async (resolve, reject) => {
+  let originalTextAudioPromise = (type === 'original' || type === 'both') ? new Promise(async (resolve, reject) => {
     try {
+      
       let edgeTtsTemp = new MsEdgeTTS()
       await edgeTtsTemp.setMetadata(
         enhanceAudioOption.originalTextvoice,
@@ -346,10 +364,10 @@ const enhanceAudioContentCreate = async () => {
       console.log(error)
       reject('error')
     }
-  })
+  }) : null
   // 翻译文本音频合成
-  let translateTextAudioPromise = new Promise(async (resolve, reject) => {
-    try {
+  let translateTextAudioPromise = (type === 'translate' || type === 'both') ? new Promise(async (resolve, reject) => {
+    try {      
       let edgeTtsTemp = new MsEdgeTTS()
       await edgeTtsTemp.setMetadata(
         enhanceAudioOption.translateTextvoice,
@@ -385,7 +403,8 @@ const enhanceAudioContentCreate = async () => {
       })
       reject('error')
     }
-  })
+  }) : null
+
   // 等待音频合成完成
   await Promise.all([originalTextAudioPromise, translateTextAudioPromise])
   // 保存到本地
@@ -396,7 +415,7 @@ const enhanceAudioContentCreate = async () => {
   )
   // 弹窗提示
   ElMessage({
-    message: '增强的文字音频数据设置成功',
+    message: `增强的文字音频数据设置成功-${type}`,
     type: 'success'
   })
 }
@@ -1245,14 +1264,6 @@ meta:
   cursor: grabbing;
 }
 
-/* .el-card__header {
-  padding: 5px !important;
-} */
-
-.el_card__body {
-  padding: 5px 2px !important;
-}
-
 :root {
   --el-fill-color-light: #e3e3e3fc;
 }
@@ -1273,6 +1284,10 @@ meta:
 <style>
 .el-card__header {
   padding: 5px !important;
+}
+
+.el-card__body {
+  padding: 2px !important;
 }
 </style>
 
@@ -1377,27 +1392,27 @@ meta:
           </div>
         </template>
 
-        <div class="overflow-auto px-0" style="height: 40vh">
-          <div v-for="(item, index) in page.content" :key="index" class="d-flex justify-content-start align-items-start"
+        <div class="overflow-auto px-0 pb-2 w-100" style="height: 40vh">
+          <div v-for="(item, index) in page.content" :key="index" class="w-100 position-relative d-flex justify-content-start align-items-start"
             :class="[enhanceAudioSettingItemIndex === index ? 'border border-primary' : '']">
             <el-button icon="VideoPlay" class="p-2"
               :type="item.audio === '' || item.translateAudio === '' ? 'warning' : 'success'" siz="large" text
               @click="playItemAudio(index)"></el-button>
-            <div class="d-flex flex-column justify-content-start align-items-center">
-              <el-text class="w-100 d-inline-block" truncated>
-                <span class="btn text-start m-0 p-0" @click="enhanceAudioSetting(index)">{{
+            <div class="d-flex flex-column justify-content-start align-items-start w-100">
+              <el-text class="d-inline-block w-100" truncated style="max-width: 250px;">
+                <span class="btn m-0 p-0" @click="enhanceAudioSetting(index)">{{
                   item.text
                 }}</span>
               </el-text>
-              <el-text v-if="item.translateText !== ''" class="d-inline-block w-100" truncated>
-                <span class="btn text-start m-0 p-0" style="font-size: 14px;">
+              <el-text v-if="item.translateText !== ''" class="d-inline-block w-100" style="max-width: 250px;" truncated>
+                <span class="btn m-0 p-0" style="font-size: 14px;">
                   {{ item.translateText }}</span>
               </el-text>
             </div>
             <el-popconfirm confirm-button-text="确定" cancel-button-text="取消" icon="Warning" icon-color="red"
               title="确定删除?" @confirm="removeItemFromPage(index)">
               <template #reference>
-                <div class="float-right end-0 me-2" :class="[index === activeIndex ? 'opacity-100' : 'opacity-0']"
+                <div class="end-0 position-absolute" :class="[index === activeIndex ? 'opacity-100' : 'opacity-0']"
                   @mouseover="activeIndex = index" @mouseout="activeIndex = -1">
                   <el-button icon="Close" class="p-2" type="danger" siz="small" text></el-button>
                 </div>
@@ -1525,7 +1540,7 @@ meta:
 
           <!-- <el-input v-model="translateOption.from" placeholder="源语言"></el-input> -->
           <!-- <el-input v-model="translateOption.to" placeholder="目标语言"></el-input> -->
-          <el-button type="primary" @click="translateText(enhanceAudioSettingItemIndex)">翻译</el-button>
+          <el-button disabled type="primary" @click="translateText(enhanceAudioSettingItemIndex)">翻译</el-button>
           <el-input size="small" class="mx-1" v-model="translateResult.translateText" :rows="3" type="textarea"
             placeholder="" style="width: 35%" />
           <el-button type="primary" @click="updateTranslateText">更新翻译</el-button>
@@ -1533,8 +1548,9 @@ meta:
       </div>
       <template #footer>
         <div class="dialog-footer d-flex justify-content-end">
-          <!-- <el-button @click="settingAudioConfig">load voices</el-button> -->
-          <el-button @click="enhanceAudioContentCreate">处理当前音频设计</el-button>
+          <el-button @click="enhanceAudioContentCreate('original')">生成源音频</el-button>
+          <el-button @click="enhanceAudioContentCreate('translate')">生成翻译音频</el-button>
+          <el-button @click="enhanceAudioContentCreate('both')">同时生成音频</el-button>
           <el-button @click="enhanceAudioDialogVisible = false; enhanceAudioSettingItemIndex = -1;">关闭</el-button>
         </div>
       </template>
