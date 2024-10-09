@@ -148,7 +148,7 @@ const addToPage = async () => {
       height: freeSelectRectEndHeight.value,
       text: ttsText.value,
       audio: '',
-      audioName: shortid.generate(),
+      audioName: shortid.generate() + '.mp3',
       // 原文本语言
       langfrom: '',
       // 翻译文本语言
@@ -158,7 +158,7 @@ const addToPage = async () => {
       // 原文本翻译后音频结果
       translateAudio: '',
       // 翻译文本翻译后音频文件名
-      translateAudioName: shortid.generate()
+      translateAudioName: shortid.generate() + '.mp3'
     }
     page.content.push(newContent)
     // page.image = originalImage
@@ -199,7 +199,7 @@ const addToPage = async () => {
       height: SelectRectEndHeight.value,
       text: ttsText.value,
       audio: '',
-      audioName: shortid.generate(),
+      audioName: shortid.generate()+ '.mp3',
       // 原文本语言
       langfrom: '',
       // 翻译文本语言
@@ -209,7 +209,7 @@ const addToPage = async () => {
       // 原文本翻译后音频结果
       translateAudio: '',
       // 翻译文本翻译后音频文件名
-      translateAudioName: shortid.generate()
+      translateAudioName: shortid.generate() + '.mp3'
     }
     page.content.push(newContent)
     // page.image = originalImage

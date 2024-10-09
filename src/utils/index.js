@@ -25,15 +25,10 @@ function downloadDesignPage(page) {
     // 音频文件
     page.content.forEach(item => {
         if (item.audio !== '') {
-            // 如果文件名有后缀 则直接保存 否则加上后缀 mp3
-            if (item.audioName.indexOf('.') !== -1) {
-                pageF.file(item.audioName, dataURItoBlob(item.audio))
-            } else {            
-                pageF.file(item.audioName + '.mp3', dataURItoBlob(item.audio))
-            }
+            pageF.file(item.audioName, dataURItoBlob(item.audio))
         }
         if (item.translateAudio !== '') {
-            pageF.file(item.translateAudioName + '.mp3', dataURItoBlob(item.translateAudio))
+            pageF.file(item.translateAudioName, dataURItoBlob(item.translateAudio))
         }
         json.content.push({
             text: item.text,
