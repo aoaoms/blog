@@ -60,7 +60,7 @@ const ratio = ref()
 const stage = ref()
 
 // 自由框定
-const freeSelectRect = ref()
+const freeSelectRect = ref(null)
 const freeSelectRectInfo = ref('随意拖动位置，确定框定区域.')
 const freeSelectRectScaleX = ref()
 const freeSelectRectScaleY = ref()
@@ -71,7 +71,7 @@ const SetFreeSelectRectInfo = (x, y, transformWidth, transformHeight, width, hei
 }
 
 // 矩形框定
-const SelectRect = ref()
+const SelectRect = ref(null)
 const SelectRectInfo = ref('请框定文本设置按钮')
 const SelectRectScaleX = ref()
 const SelectRectScaleY = ref()
@@ -121,8 +121,9 @@ const getFramedText = () => {
 }
 
 // 添加到页面
-const addToPage = async () => {
-  if (freeSelectRect.value && freeSelectRect.value !== 'undefined') {
+const addToPage = async () => { 
+
+  if (freeSelectRect.value && freeSelectRect.value !== null) {
     let newContent = {
       boundingPolygon: [
         {
@@ -173,7 +174,7 @@ const addToPage = async () => {
     })
   }
 
-  if (SelectRect.value && SelectRect.value !== 'undefined') {
+  if (SelectRect.value && SelectRect.value !== null) {
     let newContent = {
       boundingPolygon: [
         {
@@ -640,6 +641,38 @@ imgt.src = imgUrl
 
 // 载入图片
 const loadImage = () => {
+  // 如果image存在 则提示 载入图片 会清空当前设计，是否继续？
+  if (page.image && page.image?.base64?.length > 0) {
+    ElMessageBox.confirm('载入图片会清空当前设计，是否继续？', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }).then(() => {
+      if (freeSelectRect.value!== null) {
+        freeSelectRect.value.destroy()
+        freeSelectRect.value = null
+      }
+
+      if (SelectRect.value !== null) {
+        SelectRect.value.destroy()
+        SelectRect.value = null
+      }
+
+      ProcessLoadImage()
+    }).catch(() => {
+      ElMessage.warning('取消操作')
+    })
+  } else {
+    ProcessLoadImage()
+  }
+}
+
+const ProcessLoadImage = () => {
+  // 重置page数据
+  page.content = []
+  page.image = {}
+  page.coordinates = {}
+  // 
   const input = document.createElement('input')
   input.type = 'file'
   input.accept = 'image/*'
@@ -679,7 +712,8 @@ const loadImage = () => {
 const initFreeSelectRect = () => {
   console.log('initFreeSelectRect', freeSelectRect.value)
   // 如果存在选择器 则退出
-  if (freeSelectRect.value) {
+  if (SelectRect.value !== null || freeSelectRect.value!== null) {
+    ElMessage.warning('已存在选择器，请先取消选择器！')
     return
   }
   // 画选择器
@@ -808,6 +842,7 @@ const clearAllAudio = async () => {
 
 // 清空设计项目
 async function resetPageData() {
+
   page.content = []
   page.coordinates = {}
   await db.page.clear()
@@ -1143,6 +1178,12 @@ const ocrAnalyzeImage = () => {
     })
     return
   }
+
+  if (freeSelectRect.value !== null) {
+    // 已存在自由框定 退出
+    ElMessage.warning('已存在自由框定，请先删除后再添加！')
+    return
+  }
   /**
    *Base64字符串转二进制
    */
@@ -1159,6 +1200,7 @@ const ocrAnalyzeImage = () => {
       type: mime
     })
   }
+
   console.log('ocrAnalyzeImage', ocr)
   if (ocr.servicefrom === 'azure') {
     if (ocr.azure.endpoint === '' || ocr.azure.key === '') {
@@ -1294,11 +1336,27 @@ meta:
 <template>
   <div v-loading="loading">
     <audio id="idaudio" controls src="" class="visually-hidden"></audio>
+    <div class="z-3 position-fixed d-flex justify-content-center align-items-center" style="bottom: 150px; right: 60px">
+      <el-tooltip class="box-item" effect="light" content="<span>自定义演讲人角色</span>"
+        placement="top" raw-content>
+        <el-icon type="button" size="35" color="#999" class="p-2 rounded-circle" style="background-color: antiquewhite;">
+          <Mic />
+        </el-icon>
+      </el-tooltip>
+    </div>
+    <div class="z-3 position-fixed d-flex justify-content-center align-items-center" style="bottom: 100px; right: 60px">
+      <el-tooltip class="box-item" effect="light" content="<span>自定义页面输出字段</span>"
+        placement="top" raw-content>
+        <el-icon type="button" size="35" color="#999" class="p-2 rounded-circle" style="background-color: antiquewhite;">
+          <Tickets />
+        </el-icon>
+      </el-tooltip>
+    </div>
     <div class="z-3 position-fixed d-flex justify-content-center align-items-center" style="bottom: 50px; right: 60px">
       <el-tooltip class="box-item" effect="light" content="<span>所有数据仅存储在本地。<br/>客户端仅用于设计和接口数据转发服务。</span>"
         placement="top" raw-content>
-        <el-icon size="45x45" color="#999">
-          <InfoFilled />
+        <el-icon type="button" size="35" color="#999" class="p-2 rounded-circle" style="background-color: antiquewhite;">
+          <More />
         </el-icon>
       </el-tooltip>
     </div>
@@ -1306,7 +1364,7 @@ meta:
       aoaoms 多媒体音频图片制作工具
     </div>
     <div
-      class="position-fixed top-0 start-50 translate-middle-x bg-body mt-3 align-center d-flex justify-content-center align-items-center z-3">
+      class="rounded-pill position-fixed top-0 start-50 translate-middle-x bg-body mt-3 align-center d-flex justify-content-center align-items-center z-3">
       <div class="shadow-sm border py-3 rounded-pill px-3">
         <!-- <button type="button" class="btn btn-info">载入图片</button>
         <button type="button" class="btn btn-info" @click="startCrop">开始裁剪</button>
