@@ -38,6 +38,13 @@ const book = reactive({
     }
   ]
 })
+
+// log
+const log = ref(`
+<p class="p-0 m-0">2024-11-01 添加f0订阅的azure语音合成处理。</p>
+<p class="p-0 m-0 text-danger">2024-10-30 免费的Edge tts不可用。</p>
+`)
+
 const page = reactive({})
 // const coordinates = reactive({})
 const dialogTitle = ref('')
@@ -50,6 +57,12 @@ const canvasHeight = ref(1024)
 
 // 处理中
 const loading = ref(false)
+
+// 批量处理时提示信息
+const processMessage = ref({
+  type: 'info',
+  message: '设计项音频请求较多时，将耗费更多时间，请耐心等待。'
+})
 
 // 图片宽
 // const imageWidth = ref(460)
@@ -121,7 +134,7 @@ const getFramedText = () => {
 }
 
 // 添加到页面
-const addToPage = async () => { 
+const addToPage = async () => {
 
   if (freeSelectRect.value && freeSelectRect.value !== null) {
     let newContent = {
@@ -200,7 +213,7 @@ const addToPage = async () => {
       height: SelectRectEndHeight.value,
       text: ttsText.value,
       audio: '',
-      audioName: shortid.generate()+ '.mp3',
+      audioName: shortid.generate() + '.mp3',
       // 原文本语言
       langfrom: '',
       // 翻译文本语言
@@ -300,7 +313,7 @@ const translateText = async (index) => {
 const updateTranslateText = () => {
   page.content[enhanceAudioSettingItemIndex.value].translateText = translateResult.translateText
   page.content[enhanceAudioSettingItemIndex.value].langfrom = translateResult.langfrom
-  page.content[enhanceAudioSettingItemIndex.value].langto = translateResult.langto?? 'zh-hans'
+  page.content[enhanceAudioSettingItemIndex.value].langto = translateResult.langto ?? 'zh-hans'
 
   console.log(page.content[enhanceAudioSettingItemIndex.value])
 }
@@ -329,72 +342,87 @@ const enhanceAudioContentCreate = async (type) => {
   }
 
   if (type === 'original' && text === '') return
-  if (type === 'translate' &&  translateText === '') return
+  if (type === 'translate' && translateText === '') return
   if (type === 'both' && (text === '' || translateText === '')) return
   // 原文本音频合成
   let originalTextAudioPromise = (type === 'original' || type === 'both') ? new Promise(async (resolve, reject) => {
     try {
-      
-      let edgeTtsTemp = new MsEdgeTTS()
-      await edgeTtsTemp.setMetadata(
-        enhanceAudioOption.originalTextvoice,
-        OUTPUT_FORMAT.AUDIO_24KHZ_48KBITRATE_MONO_MP3
-      )
-      let options = {
-        volume: enhanceAudioOption.originalTextVoiceVolume,
-        rate: enhanceAudioOption.originalTextVoiceSpeed,
-        pitch: enhanceAudioOption.originalTextVoicePitch
-      }
-      let readable = edgeTtsTemp.toStream(text, options)
-      let audioUnit8Array = new Uint8Array()
-      readable.on('data', (data) => {
-        audioUnit8Array = new Uint8Array([...audioUnit8Array, ...data])
-      })
+      // 如果启用了azure 在线服务则使用azure语音合成
+      if (config.tts.enable) {
+        let originalAudioBase64 = await ttsOutputAudioBase64Encode(enhanceAudioOption.originalTextvoice, text, type)
+        page.content[enhanceAudioSettingItemIndex.value].audio = 'data:audio/mp3;base64,' + originalAudioBase64
+        resolve()
+      } else {
 
-      readable.on('end', () => {
-        let originalTextBase64 = base64js.fromByteArray(audioUnit8Array)
-        page.content[enhanceAudioSettingItemIndex.value].audio =
-          'data:audio/mp3;base64,' + originalTextBase64
-        resolve()
-      })
-      readable.on('closed', () => {
-        console.log('STREAM CLOSED')
-        resolve()
-      })
+        // let agent = new SocksProxyAgent("socks://47.91.29.151:8443")
+        let edgeTtsTemp = new MsEdgeTTS()
+        await edgeTtsTemp.setMetadata(
+          enhanceAudioOption.originalTextvoice,
+          OUTPUT_FORMAT.AUDIO_24KHZ_48KBITRATE_MONO_MP3
+        )
+        let options = {
+          volume: enhanceAudioOption.originalTextVoiceVolume,
+          rate: enhanceAudioOption.originalTextVoiceSpeed,
+          pitch: enhanceAudioOption.originalTextVoicePitch
+        }
+        let readable = edgeTtsTemp.toStream(text, options)
+        let audioUnit8Array = new Uint8Array()
+        readable.on('data', (data) => {
+          audioUnit8Array = new Uint8Array([...audioUnit8Array, ...data])
+        })
+
+        readable.on('end', () => {
+          let originalTextBase64 = base64js.fromByteArray(audioUnit8Array)
+          page.content[enhanceAudioSettingItemIndex.value].audio =
+            'data:audio/mp3;base64,' + originalTextBase64
+          resolve()
+        })
+        readable.on('closed', () => {
+          console.log('STREAM CLOSED')
+          resolve()
+        })
+      }
     } catch (error) {
+      ElMessage.error('增强的文字音频生成失败！Edge tts服务不可用。')
       console.log(error)
       reject('error')
     }
   }) : null
   // 翻译文本音频合成
   let translateTextAudioPromise = (type === 'translate' || type === 'both') ? new Promise(async (resolve, reject) => {
-    try {      
-      let edgeTtsTemp = new MsEdgeTTS()
-      await edgeTtsTemp.setMetadata(
-        enhanceAudioOption.translateTextvoice,
-        OUTPUT_FORMAT.AUDIO_24KHZ_48KBITRATE_MONO_MP3
-      )
-      let options = {
-        volume: enhanceAudioOption.translateTextVoiceVolume,
-        rate: enhanceAudioOption.translateTextVoiceSpeed,
-        pitch: enhanceAudioOption.translateTextVoicePitch
-      }
-      let readable = edgeTtsTemp.toStream(translateText, options)
-      let audioUnit8Array = new Uint8Array()
-      readable.on('data', (data) => {
-        audioUnit8Array = new Uint8Array([...audioUnit8Array, ...data])
-      })
+    try {
+      if (config.tts.enable) {
+        let translateAudioBase64 = await ttsOutputAudioBase64Encode(enhanceAudioOption.translateTextvoice, translateText, type)
+        page.content[enhanceAudioSettingItemIndex.value].translateAudio = 'data:audio/mp3;base64,' + translateAudioBase64
+        resolve()
+      } else {
+        let edgeTtsTemp = new MsEdgeTTS()
+        await edgeTtsTemp.setMetadata(
+          enhanceAudioOption.translateTextvoice,
+          OUTPUT_FORMAT.AUDIO_24KHZ_48KBITRATE_MONO_MP3
+        )
+        let options = {
+          volume: enhanceAudioOption.translateTextVoiceVolume,
+          rate: enhanceAudioOption.translateTextVoiceSpeed,
+          pitch: enhanceAudioOption.translateTextVoicePitch
+        }
+        let readable = edgeTtsTemp.toStream(translateText, options)
+        let audioUnit8Array = new Uint8Array()
+        readable.on('data', (data) => {
+          audioUnit8Array = new Uint8Array([...audioUnit8Array, ...data])
+        })
 
-      readable.on('end', () => {
-        let translateTextBase64 = base64js.fromByteArray(audioUnit8Array)
-        page.content[enhanceAudioSettingItemIndex.value].translateAudio =
-          'data:audio/mp3;base64,' + translateTextBase64
-        resolve()
-      })
-      readable.on('closed', () => {
-        console.log('STREAM CLOSED')
-        resolve()
-      })
+        readable.on('end', () => {
+          let translateTextBase64 = base64js.fromByteArray(audioUnit8Array)
+          page.content[enhanceAudioSettingItemIndex.value].translateAudio =
+            'data:audio/mp3;base64,' + translateTextBase64
+          resolve()
+        })
+        readable.on('closed', () => {
+          console.log('STREAM CLOSED')
+          resolve()
+        })
+      }
     } catch (error) {
       console.log(error)
       ElMessage({
@@ -493,36 +521,45 @@ const playAudio = async (text) => {
   if (audioOption.currentVoice === '' || text === '') {
     return
   }
-  //"zh-CN-XiaoxiaoNeural"
-  await edgeTts.setMetadata(audioOption.currentVoice, OUTPUT_FORMAT.AUDIO_24KHZ_48KBITRATE_MONO_MP3)
-  let options = {
-    volume: audioOption.volume,
-    rate: audioOption.speed,
-    pitch: audioOption.pitch
+  try {
+    //"zh-CN-XiaoxiaoNeural"
+    await edgeTts.setMetadata(audioOption.currentVoice, OUTPUT_FORMAT.AUDIO_24KHZ_48KBITRATE_MONO_MP3)
+    let options = {
+      volume: audioOption.volume,
+      rate: audioOption.speed,
+      pitch: audioOption.pitch
+    }
+    const readable = edgeTts.toStream(text, options)
+    //
+
+    let audioUnit8Array = new Uint8Array()
+    readable.on('data', (data) => {
+      // console.log("DATA RECEIVED", data, data.length);
+      // raw audio file data
+      audioUnit8Array = new Uint8Array([...audioUnit8Array, ...data])
+      // console.log('audioUnit8Array ----',audioUnit8Array.length);
+    })
+
+    readable.on('end', () => {
+      // unit8array 转 base64
+      let originalBase64 = base64js.fromByteArray(audioUnit8Array)
+
+      // console.log("STREAM END",tttt, audioUnit8Array.length);
+      let audio = document.getElementById('idaudio')
+      audio.src = 'data:audio/mp3;base64,' + originalBase64
+      audio.play()
+    })
+    readable.on('closed', () => {
+      console.log('STREAM CLOSED')
+    })
+  } catch (error) {
+    console.log(error)
+    ElMessage({
+      message: '音频播放失败！Edge tts服务异常。',
+      type: 'error',
+      duration: 3000
+    })
   }
-  const readable = edgeTts.toStream(text, options)
-  //
-
-  let audioUnit8Array = new Uint8Array()
-  readable.on('data', (data) => {
-    // console.log("DATA RECEIVED", data, data.length);
-    // raw audio file data
-    audioUnit8Array = new Uint8Array([...audioUnit8Array, ...data])
-    // console.log('audioUnit8Array ----',audioUnit8Array.length);
-  })
-
-  readable.on('end', () => {
-    // unit8array 转 base64
-    let originalBase64 = base64js.fromByteArray(audioUnit8Array)
-
-    // console.log("STREAM END",tttt, audioUnit8Array.length);
-    let audio = document.getElementById('idaudio')
-    audio.src = 'data:audio/mp3;base64,' + originalBase64
-    audio.play()
-  })
-  readable.on('closed', () => {
-    console.log('STREAM CLOSED')
-  })
 }
 
 // 音频文档生成 统一格式设置 生成所有音频
@@ -562,32 +599,41 @@ const audioContentCreate = async () => {
             readable.on('end', () => {
               let originalBase64 = base64js.fromByteArray(audioUnit8Array)
               page.content[i].audio = 'data:audio/mp3;base64,' + originalBase64
-              resolve()
+              resolve('success')
             })
             readable.on('closed', () => {
               console.log('STREAM CLOSED')
-              resolve()
+              resolve('success')
             })
-            resolve()
+            resolve('success')
           } catch (error) {
+            isProcessing.value = false
+            processMessage.value.type = 'error'
+            processMessage.value.message = '音频文档生成失败！Edge tts服务不可用。'
+            ElMessage({
+              message: '音频文档生成失败！Edge tts服务不可用。',
+              type: 'error',
+              duration: 3000
+            })
             console.log(error)
-            reject('error')
+            reject(error)
           }
         })
       )
     }
     Promise.all(primiseAll).then(async (resolve, reject) => {
       isProcessing.value = false
-      if (resolve) {
+      if (resolve === 'success') {
         ElMessage({
           message: '音频文档生成成功',
           type: 'success'
         })
         await savePageData()
       } else {
+        isProcessing.value = false
         ElMessage({
           message: '音频文档生成失败',
-          type: 'error' + reject.message
+          type: 'error' + reject
         })
       }
     })
@@ -648,7 +694,7 @@ const loadImage = () => {
       cancelButtonText: '取消',
       type: 'warning'
     }).then(() => {
-      if (freeSelectRect.value!== null) {
+      if (freeSelectRect.value !== null) {
         freeSelectRect.value.destroy()
         freeSelectRect.value = null
       }
@@ -712,7 +758,7 @@ const ProcessLoadImage = () => {
 const initFreeSelectRect = () => {
   console.log('initFreeSelectRect', freeSelectRect.value)
   // 如果存在选择器 则退出
-  if (SelectRect.value !== null || freeSelectRect.value!== null) {
+  if (SelectRect.value !== null || freeSelectRect.value !== null) {
     ElMessage.warning('已存在选择器，请先取消选择器！')
     return
   }
@@ -1108,38 +1154,214 @@ const config = reactive({
       secretKey: '',
       ocrUrl: ''
     }
+  },
+  tts: {
+    enable: false,
+    servicefrom: 'azure',
+    azure: {
+      endpoint: '',
+      key: '',
+      token: '',
+      // 过期时间 单位秒
+      expireTime: 0
+    },
+    aliyun: {
+      apiKey: '',
+      secretKey: ''
+    },
+    xunfei: {
+      secretId: '',
+      secretKey: ''
+    }
   }
 })
 // ocr 服务配置
 // const ocrSettingDialogVisible = ref(false)
-const ocr = reactive({
-  servicefrom: 'azure',
-  azure: {
-    endpoint: '',
-    key: '',
-    region: '',
-    ocrUrl: ''
-  },
-  baidu: {
-    apiKey: '',
-    secretKey: '',
-    ocrUrl: ''
-  },
-  tencent: {
-    secretId: '',
-    secretKey: '',
-    ocrUrl: ''
+// const ocr = reactive({
+//   servicefrom: 'azure',
+//   azure: {
+//     endpoint: '',
+//     key: '',
+//     region: '',
+//     ocrUrl: ''
+//   },
+//   baidu: {
+//     apiKey: '',
+//     secretKey: '',
+//     ocrUrl: ''
+//   },
+//   tencent: {
+//     secretId: '',
+//     secretKey: '',
+//     ocrUrl: ''
+//   }
+// })
+
+// init azure tts rest api token
+const initAzureTtsToken = async () => {
+  if (config.tts.azure.key === '' || config.tts.azure.endpoint === '') {
+    ElMessage.warning('请先配置Azure TTS服务')
+    return false
   }
-})
+
+  console.log('ttstoken -----', config.tts.azure.expireTime, new Date().getTime())
+
+  // 如果token存在 且 有效期未过期 则直接返回
+  if (config.tts.azure.token !== '' && config.tts.azure.expireTime > new Date().getTime()) {
+    console.log('initAzureTtsToken token exist & not expire', config.tts.azure.token)
+    return true
+  }
+
+  try {
+    let url = config.tts.azure.endpoint + 'sts/v1.0/issueToken'
+    let headers = {
+      'Ocp-Apim-Subscription-Key': config.tts.azure.key,
+      // 'Host': 'eastasia.api.cognitive.microsoft.com',
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+    let res = await axios.post(url, {}, { headers: headers })
+    config.tts.azure.token = res.data
+    // token 有效期10分钟，计算当前时间加上10分钟
+    let expireTime = new Date().getTime() + 9 * 60 * 1000
+    config.tts.azure.expireTime = expireTime
+    // 保存配置
+    localStorage.setItem('config', JSON.stringify(config))
+    console.log('initAzureTtsToken config.tts.azure.token', config.tts.azure.token)
+    return true
+  } catch (error) {
+    console.log(error)
+    ElMessage.error(`获取Azure TTS服务token失败：${error.message}`)
+    return false
+  }
+}
+
+// 测试Azure TTS服务
+const testTTS = async () => {
+  if (config.tts.azure.key === '' || config.tts.azure.endpoint === '') {
+    ElMessage.warning('请先配置Azure TTS服务')
+    return
+  }
+
+  let issueTokenRes = await initAzureTtsToken()
+
+  if (!issueTokenRes) {
+    ElMessage.error('获取Azure TTS服务token失败')
+    return
+  } else {
+    try {
+      let url = 'https://eastasia.tts.speech.microsoft.com/cognitiveservices/v1'
+      let headers = {
+        'Authorization': 'Bearer ' + config.tts.azure.token,
+        'Content-Type': 'application/ssml+xml',
+        'X-Microsoft-OutputFormat': 'audio-16khz-32kbitrate-mono-mp3',
+        // 'User-Agent': 'aoaoms.mmpage'
+      }
+
+      let res = await fetch(url, {
+        method: 'POST',
+        headers: headers,
+        body: `
+        <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US">
+          <voice name="en-US-AvaMultilingualNeural">
+            welcome to use azure text to speech service
+          </voice>
+          <voice name="en-US-AndrewMultilingualNeural">
+            欢迎使用Azure语音合成服务
+          </voice>
+        </speak>`
+      })
+      console.log('testTTS res', res)
+
+      if (res.ok) {
+        // // 处理返回的 流数据
+        let arrayBuffer = await res.arrayBuffer()
+        let base64Audio = Buffer.from(arrayBuffer).toString('base64')
+
+        let urlAudio = 'data:audio/mpeg;base64,' + base64Audio
+        let audio = new Audio(urlAudio)
+        audio.play()
+        ElMessage.success('测试Azure TTS服务成功')
+      } else {
+        console.log('testTTS res.ok', res.ok)
+        ElMessage.error('测试Azure TTS服务失败')
+      }
+
+    } catch (error) {
+      console.log(error)
+      ElMessage.error(`测试Azure TTS服务失败：${error.message}`)
+    }
+  }
+}
+
+// AZURE TTS output audio base64 encode
+const ttsOutputAudioBase64Encode = async (voiceName, text, type) => {
+
+  if (config.tts.azure.key === '' || config.tts.azure.endpoint === '') {
+    ElMessage.warning('请先配置Azure TTS服务')
+    return
+  }
+
+  let issueTokenRes = await initAzureTtsToken()
+
+  if (!issueTokenRes) {
+    ElMessage.error('获取Azure TTS服务token失败')
+    return
+  } else {
+    try {
+      let url = 'https://eastasia.tts.speech.microsoft.com/cognitiveservices/v1'
+      let headers = {
+        'Authorization': 'Bearer ' + config.tts.azure.token,
+        'Content-Type': 'application/ssml+xml',
+        'X-Microsoft-OutputFormat': 'audio-16khz-32kbitrate-mono-mp3',
+      }
+
+      let rate, pitch, volume
+      if (type === 'original' || type === 'both') {
+        rate = enhanceAudioOption.originalTextVoiceSpeed
+        pitch = enhanceAudioOption.originalTextVoicePitch
+        volume = enhanceAudioOption.originalTextVoiceVolume
+      } else if (type === 'translate') {
+        rate = enhanceAudioOption.translateTextVoiceSpeed
+        pitch = enhanceAudioOption.translateTextVoicePitch
+        volume = enhanceAudioOption.translateTextVoiceVolume
+      }
+
+      let res = await fetch(url, {
+        method: 'POST',
+        headers: headers,
+        body: `
+        <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US">
+          <voice name="${voiceName}">
+            <prosody volume="${volume}" rate="${rate}" pitch="${pitch}">
+              ${text}
+            </prosody>
+          </voice>
+        </speak>`
+      })
+
+      if (res.ok) {
+        // // 处理返回的 流数据
+        let arrayBuffer = await res.arrayBuffer()
+        let base64Audio = Buffer.from(arrayBuffer).toString('base64')
+
+        return base64Audio
+      } else {
+        console.log('testTTS res.ok', res.ok)
+        ElMessage.error('Azure TTS服务请求失败')
+      }
+    } catch (error) {
+      console.log(error)
+      ElMessage.error(`Azure TTS服务请求失败：${error.message}`)
+    }
+  }
+
+}
 
 const initConfig = () => {
   if (localStorage.getItem('config')) {
     config.common = JSON.parse(localStorage.getItem('config')).common
     config.ocr = JSON.parse(localStorage.getItem('config')).ocr
-    ocr.servicefrom = config.ocr.servicefrom
-    ocr.azure = config.ocr.azure
-    ocr.baidu = config.ocr.baidu
-    ocr.tencent = config.ocr.tencent
+    config.tts = JSON.parse(localStorage.getItem('config')).tts
   }
 }
 const saveConfig = () => {
@@ -1202,8 +1424,8 @@ const ocrAnalyzeImage = () => {
   }
 
   console.log('ocrAnalyzeImage', ocr)
-  if (ocr.servicefrom === 'azure') {
-    if (ocr.azure.endpoint === '' || ocr.azure.key === '') {
+  if (config.ocr.servicefrom === 'azure') {
+    if (config.ocr.azure.endpoint === '' || config.ocr.azure.key === '') {
       ElMessage({
         message: '请先配置Azure OCR服务',
         type: 'error'
@@ -1218,9 +1440,9 @@ const ocrAnalyzeImage = () => {
     // let form = new Blob([imgt], { type: 'image/jpeg' })
     let form = dataURLtoBlob(imgt.src)
     // let url = `https://${ocr.azure.endpoint}/vision/v3.2/read/analyze`
-    let url = import.meta.env.PROD ? ocr.azure.endpoint + 'vision/v3.2/read/analyze' : '/azure1'
+    let url = import.meta.env.PROD ? config.ocr.azure.endpoint + 'vision/v3.2/read/analyze' : '/azure1'
     let headers = {
-      'Ocp-Apim-Subscription-Key': ocr.azure.key,
+      'Ocp-Apim-Subscription-Key': config.ocr.azure.key,
       'Content-Type': 'image/jpeg'
     }
 
@@ -1232,11 +1454,11 @@ const ocrAnalyzeImage = () => {
         let OperationLocation = res.headers['operation-location']
         let operationId = OperationLocation.substring(OperationLocation.lastIndexOf('/') + 1)
         let url2 = import.meta.env.PROD
-          ? ocr.azure.endpoint + 'vision/v3.2/read/analyzeResults/' + operationId
+          ? config.ocr.azure.endpoint + 'vision/v3.2/read/analyzeResults/' + operationId
           : '/azure2' + `${operationId}`
         let timer = setInterval(() => {
           let header2 = {
-            'Ocp-Apim-Subscription-Key': ocr.azure.key
+            'Ocp-Apim-Subscription-Key': config.ocr.azure.key
           }
           axios.get(url2, { headers: header2 }).then((res) => {
             if (res.data.status === 'succeeded') {
@@ -1336,18 +1558,24 @@ meta:
 <template>
   <div v-loading="loading">
     <audio id="idaudio" controls src="" class="visually-hidden"></audio>
+    <!-- 日志面板 -->
+    <a href="/projects/mmpage-manual" target="_blank" class="z-3 position-fixed d-flex justify-content-center align-items-center" style="top: 60px; right: 60px">
+      <el-tooltip class="box-item" effect="light" :content="log" placement="bottom" raw-content>
+        <el-icon type="button" size="35" color="#999" class="p-2 rounded-circle" style="background-color: whitesmoke;">
+          <ChatDotRound />
+        </el-icon>
+      </el-tooltip>
+    </a>
     <div class="z-3 position-fixed d-flex justify-content-center align-items-center" style="bottom: 150px; right: 60px">
-      <el-tooltip class="box-item" effect="light" content="<span>自定义演讲人角色</span>"
-        placement="top" raw-content>
-        <el-icon type="button" size="35" color="#999" class="p-2 rounded-circle" style="background-color: antiquewhite;">
+      <el-tooltip class="box-item" effect="light" content="<span>自定义演讲人角色</span>" placement="top" raw-content>
+        <el-icon type="button" size="35" color="#999" class="p-2 rounded-circle" style="background-color: whitesmoke;">
           <Mic />
         </el-icon>
       </el-tooltip>
     </div>
     <div class="z-3 position-fixed d-flex justify-content-center align-items-center" style="bottom: 100px; right: 60px">
-      <el-tooltip class="box-item" effect="light" content="<span>自定义页面输出字段</span>"
-        placement="top" raw-content>
-        <el-icon type="button" size="35" color="#999" class="p-2 rounded-circle" style="background-color: antiquewhite;">
+      <el-tooltip class="box-item" effect="light" content="<span>自定义页面输出字段</span>" placement="top" raw-content>
+        <el-icon type="button" size="35" color="#999" class="p-2 rounded-circle" style="background-color: whitesmoke;">
           <Tickets />
         </el-icon>
       </el-tooltip>
@@ -1355,7 +1583,7 @@ meta:
     <div class="z-3 position-fixed d-flex justify-content-center align-items-center" style="bottom: 50px; right: 60px">
       <el-tooltip class="box-item" effect="light" content="<span>所有数据仅存储在本地。<br/>客户端仅用于设计和接口数据转发服务。</span>"
         placement="top" raw-content>
-        <el-icon type="button" size="35" color="#999" class="p-2 rounded-circle" style="background-color: antiquewhite;">
+        <el-icon type="button" size="35" color="#999" class="p-2 rounded-circle" style="background-color: whitesmoke;">
           <More />
         </el-icon>
       </el-tooltip>
@@ -1451,7 +1679,8 @@ meta:
         </template>
 
         <div class="overflow-auto px-0 pb-2 w-100" style="height: 40vh">
-          <div v-for="(item, index) in page.content" :key="index" class="w-100 position-relative d-flex justify-content-start align-items-start"
+          <div v-for="(item, index) in page.content" :key="index"
+            class="w-100 position-relative d-flex justify-content-start align-items-start"
             :class="[enhanceAudioSettingItemIndex === index ? 'border border-primary' : '']">
             <el-button icon="VideoPlay" class="p-2"
               :type="item.audio === '' || item.translateAudio === '' ? 'warning' : 'success'" siz="large" text
@@ -1462,7 +1691,8 @@ meta:
                   item.text
                 }}</span>
               </el-text>
-              <el-text v-if="item.translateText !== ''" class="d-inline-block w-100" style="max-width: 250px;" truncated>
+              <el-text v-if="item.translateText !== ''" class="d-inline-block w-100" style="max-width: 250px;"
+                truncated>
                 <span class="btn m-0 p-0" style="font-size: 14px;">
                   {{ item.translateText }}</span>
               </el-text>
@@ -1716,11 +1946,11 @@ meta:
           <el-tab-pane label="OCR service" name="OCR" class="p-2">
             <el-collapse accordion>
               <el-collapse-item title="azureOCR" name="1">
-                <el-input class="mt-3" v-model="ocr.azure.endpoint" style="width: 340px"
+                <el-input class="mt-3" v-model="config.ocr.azure.endpoint" style="width: 340px"
                   placeholder="Please input azure endpoint" clearable type="password" show-password />
                 <div style="height: 20px"></div>
-                <el-input v-model="ocr.azure.key" style="width: 340px" placeholder="Please input azure key" clearable
-                  type="password" show-password />
+                <el-input v-model="config.ocr.azure.key" style="width: 340px" placeholder="Please input azure key"
+                  clearable type="password" show-password />
               </el-collapse-item>
               <el-collapse-item title="paddleOCR" name="2">
                 <div>
@@ -1730,11 +1960,27 @@ meta:
 
             </el-collapse>
           </el-tab-pane>
+
+          <el-tab-pane label="TTS service" name="TTS" class="p-2">
+            <span class="me-2">使用tts服务处理音频</span>
+            <el-switch v-model="config.tts.enable" size="large" />
+            <el-collapse accordion>
+              <el-collapse-item title="azureTTS" name="1">
+                <el-input class="mt-3" v-model="config.tts.azure.endpoint" style="width: 340px"
+                  placeholder="Please input azure endpoint" clearable type="password" show-password />
+                <div style="height: 20px"></div>
+                <el-input v-model="config.tts.azure.key" style="width: 340px" placeholder="Please input azure key"
+                  clearable type="password" show-password />
+              </el-collapse-item>
+
+            </el-collapse>
+          </el-tab-pane>
         </el-tabs>
       </div>
       <template #footer>
         <div class="dialog-footer">
           <div class="d-flex justify-content-end">
+            <el-button @click="testTTS">测试Azure TTS</el-button>
             <el-button @click="showConfig = false">取消</el-button>
             <el-button type="primary" @click="saveConfig"> 保存 </el-button>
           </div>
@@ -1752,7 +1998,7 @@ meta:
         <span v-if="isProcessing">正在处理，请稍候...</span>
         <span v-else>处理完成，请查看结果</span>
       </div>
-      <span>设计项音频请求较多时，将耗费更多时间，请耐心等待。</span>
+      <span :class="{ 'text-danger': processMessage.type === 'error' }">{{ processMessage.message }}</span>
       <template #footer>
         <div class="dialog-footer">
           <el-button :disabled="isProcessing" @click="processDialogVisible = false">关闭</el-button>
