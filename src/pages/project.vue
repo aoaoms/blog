@@ -32,7 +32,7 @@
                         </div>
                         
                         <p class="my-3 d-inline-block" style="text-indent: 2rem;">
-                            使用Maui blazor hybrid 技术方案实现的一款多平台Ai聊天应用，支持window\android 平台。对接了ChatGPT聊天模型，Azure语音合成服务和
+                            使用Maui blazor hybrid 技术方案实现的一款多平台Ai聊天应用，支持window、ndroid 平台。对接了ChatGPT聊天模型，Azure语音合成服务和
                             Dall-e 生图模型。
                         </p>
                     </div>
@@ -40,11 +40,11 @@
             </div>
             <div class="col">
                 <div class="d-flex justify-content-start align-item-center  mouse-hover p-3 rounded-3">
-                    <img src="/image/aiduochat.svg" class="" width="45" height="45" alt="爱多聊Ai">
+                    <!-- <img src="/image/aiduochat.svg" class="" width="45" height="45" alt="爱多聊Ai"> -->
                     
                     <div class="d-flex flex-column justify-content-start align-items-start ms-4">
                         <div class="d-flex justify-content-between align-center w-100">
-                            <h5 class="d-inline-block">爱多爱学</h5>
+                            <h5 class="d-inline-block">52点读</h5>
                             <!-- <a class="link-underline-opacity-0 link-underline d-inline-block" target="_blank" href="/projects/aiduo-chat">
                                 详情
                             </a> -->
@@ -65,14 +65,15 @@
                     
                     <div class="d-flex flex-column justify-content-start align-items-start ms-4">
                         <div class="d-flex justify-content-between align-center w-100">
-                            <h5 class="d-inline-block">爱多多媒体音频图片制作工具</h5>
+                            <h5 class="d-inline-block">多媒体图片音频制作工具</h5>
                             <a class="link-underline-opacity-0 link-underline d-inline-block" target="_blank" href="/mmpage">
                                 Try it
                             </a>
                         </div>
                         
                         <p class="my-3 d-inline-block" style="text-indent: 2rem;">
-                            使用OCR识别图片文字，并框定文字区域，online文字生成音频。支持下载设计包。
+                            使用OCR识别图片文字，并框定文字区域，在线文字生成音频；输出可编程的结构化数据内容，支持下载设计包。可用于制作
+                            点读应用等。
                         </p>
                     </div>
                 </div>

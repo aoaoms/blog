@@ -16,28 +16,16 @@ import { computed, inject, reactive, ref } from 'vue'
 const $kit = inject('kit')
 const edgeTts = new MsEdgeTTS()
 const activeTab = ref('common')
-const book = reactive({
-  name: '美国小学学地道口语',
-  pages: [
-    {
-      page: 0,
-      buttons: [
-        {
-          boundingPolygon: [
-            { x: 100, y: 100 },
-            { x: 200, y: 100 },
-            { x: 200, y: 200 },
-            { x: 100, y: 200 }
-          ],
-          width: 30,
-          height: 30,
-          text: '你好，世界！',
-          audio: ''
-        }
-      ]
-    }
-  ]
-})
+
+// 重载配置
+const ResetConfig = () => {
+  localStorage.removeItem('config')
+  localStorage.setItem('config', JSON.stringify(config))
+  ElMessage({
+    message: '重载配置成功',
+    type:'success'
+  })
+}
 
 // log
 const log = ref(`
@@ -1980,6 +1968,7 @@ meta:
       <template #footer>
         <div class="dialog-footer">
           <div class="d-flex justify-content-end">
+            <el-button @click="ResetConfig">重载配置</el-button>
             <el-button @click="testTTS">测试Azure TTS</el-button>
             <el-button @click="showConfig = false">取消</el-button>
             <el-button type="primary" @click="saveConfig"> 保存 </el-button>
